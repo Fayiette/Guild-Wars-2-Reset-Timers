@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guild Wars 2 Reset Timers</title>
+    <style>
+        /* Base styling for the page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* Container for all content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Main header styling */
+        h1 {
+            text-align: center;
+            color: #c89b3c;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        /* Current time display */
+        #current-time {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #9e9e9e;
+        }
+
+        /* Category container styling */
+        .category {
+            background-color: #2a2a2a;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #3a3a3a;
+        }
+
+        /* Category header (clickable to expand/collapse) */
+        .category-header {
+            padding: 15px 20px;
+            cursor: pointer;
+            background-color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        /* Hover effect for category header */
+        .category-header:hover {
+            background-color: #3a3a3a;
+        }
+
+        /* Category title styling */
+        .category-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #c89b3c;
+        }
+
+        /* Indicator showing time until next reset */
+        .category-timer {
+            color: #6db3f2;
+            font-weight: bold;
+        }
+
+        /* Expand/collapse icon */
+        .expand-icon {
+            transition: transform 0.3s;
+            color: #9e9e9e;
+            margin-left: 10px;
+        }
+
+        /* Rotated icon when category is expanded */
+        .expand-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        /* Content area that shows/hides */
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        /* Expanded state for content */
+        .category-content.expanded {
+            max-height: 1000px;
+        }
+
+        /* Inner padding for content */
+        .content-inner {
+            padding: 20px;
+        }
+
+        /* Individual reset item styling */
+        .reset-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #3a3a3a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Remove border from last item */
+        .reset-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Reset item name */
+        .reset-name {
+            color: #e0e0e0;
+        }
+
+        /* Reset item timer */
+        .reset-time {
+            color: #6db3f2;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Alert styling for soon-to-reset items */
+        .soon {
+            color: #ff6b6b;
+        }
+
+        /* Footer information */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6e6e6e;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Guild Wars 2 Reset Timers</h1>
+        <div id="current-time">Loading...</div>
+
+        <!-- Daily Resets Category -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div>
+                    <span class="category-title">Daily Resets</span>
+                </div>
+                <div>
+                    <span class="category-timer" data-reset="daily">--d --h --m --s</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="content-inner">
+                    <div class="reset-item">
+                        <span class="reset-name">Daily Achievements</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Login Rewards</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Laurel Vendor Discounts</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Map Bonus Rewards</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Tequatl/World Boss Chests</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Home Instance Nodes</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Jumping Puzzles (Chests)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Daily Fractals</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Daily Strike Missions</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Resets Category -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div>
+                    <span class="category-title">Weekly Resets</span>
+                </div>
+                <div>
+                    <span class="category-timer" data-reset="weekly">--d --h --m --s</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="content-inner">
+                    <div class="reset-item">
+                        <span class="reset-name">Raid Wings (All Wings)</span>
+                        <span class="reset-time" data-reset="weekly">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Guild Missions</span>
+                        <span class="reset-time" data-reset="weekly">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Weekly Strike Mission Chests</span>
+                        <span class="reset-time" data-reset="weekly">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Key from Level 10 Story</span>
+                        <span class="reset-time" data-reset="weekly">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Weekly PvP/WvW Chests</span>
+                        <span class="reset-time" data-reset="weekly">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Legendary Armory Weekly Limit</span>
+                        <span class="reset-time" data-reset="weekly">--d --h --m --s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meta Event Resets Category -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div>
+                    <span class="category-title">Meta Event Resets</span>
+                </div>
+                <div>
+                    <span class="category-timer" data-reset="daily">--d --h --m --s</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="content-inner">
+                    <div class="reset-item">
+                        <span class="reset-name">Dragon's Stand (HoT)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Auric Basin (HoT)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Tangled Depths (HoT)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Verdant Brink (HoT)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Palawadan (PoF)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Serpent's Ire (PoF)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Dragonfall (LWS4)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Drizzlewood Coast (IBS)</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WvW Resets Category -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div>
+                    <span class="category-title">WvW Resets</span>
+                </div>
+                <div>
+                    <span class="category-timer" data-reset="wvw">--d --h --m --s</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="content-inner">
+                    <div class="reset-item">
+                        <span class="reset-name">WvW Matchup Reset</span>
+                        <span class="reset-time" data-reset="wvw">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">WvW Skirmish (2-hour cycle)</span>
+                        <span class="reset-time" data-reset="wvw-skirmish">--d --h --m --s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Resets Category -->
+        <div class="category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div>
+                    <span class="category-title">Other Resets</span>
+                </div>
+                <div>
+                    <span class="category-timer" data-reset="daily">--d --h --m --s</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="content-inner">
+                    <div class="reset-item">
+                        <span class="reset-name">Map Event Cycles</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Trading Post Listings</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                    <div class="reset-item">
+                        <span class="reset-name">Mystic Forge Daily Limit</span>
+                        <span class="reset-time" data-reset="daily">--d --h --m --s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            All times shown in your local timezone<br>
+            Daily Reset: 00:00 UTC | Weekly Reset: Monday 07:30 UTC | WvW Reset: Friday 18:00 UTC
+        </div>
+    </div>
+
+    <script>
+        // Calculate time remaining until next reset
+        function getTimeUntilReset(resetType) {
+            const now = new Date();
+            const utcNow = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+                now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+            let resetTime;
+
+            // Calculate next reset time based on type
+            if (resetType === 'daily') {
+                // Daily reset at 00:00 UTC
+                resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0);
+                if (utcNow >= resetTime) {
+                    resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0);
+                }
+            } else if (resetType === 'weekly') {
+                // Weekly reset at Monday 07:30 UTC
+                const dayOfWeek = now.getUTCDay();
+                let daysUntilMonday = (1 - dayOfWeek + 7) % 7;
+
+                resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                    now.getUTCDate() + daysUntilMonday, 7, 30, 0);
+
+                // If it's Monday but past 07:30 UTC, or it's calculated to today but already passed
+                if (utcNow >= resetTime) {
+                    resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                        now.getUTCDate() + daysUntilMonday + 7, 7, 30, 0);
+                }
+            } else if (resetType === 'wvw') {
+                // WvW reset at Friday 18:00 UTC
+                const dayOfWeek = now.getUTCDay();
+                let daysUntilFriday = (5 - dayOfWeek + 7) % 7;
+
+                resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                    now.getUTCDate() + daysUntilFriday, 18, 0, 0);
+
+                // If it's Friday but past 18:00 UTC, or calculated to today but already passed
+                if (utcNow >= resetTime) {
+                    resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                        now.getUTCDate() + daysUntilFriday + 7, 18, 0, 0);
+                }
+            } else if (resetType === 'wvw-skirmish') {
+                // WvW Skirmish resets every 2 hours at even hours UTC
+                const currentHour = now.getUTCHours();
+                const nextEvenHour = currentHour % 2 === 0 ? currentHour + 2 : currentHour + 1;
+
+                if (nextEvenHour >= 24) {
+                    resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                        now.getUTCDate() + 1, nextEvenHour - 24, 0, 0);
+                } else {
+                    resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                        now.getUTCDate(), nextEvenHour, 0, 0);
+                }
+
+                // If we're past the minutes mark this hour, move to next reset
+                if (now.getUTCMinutes() > 0 || now.getUTCSeconds() > 0) {
+                    if (currentHour % 2 !== 0) {
+                        resetTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                            now.getUTCDate(), currentHour + 1, 0, 0);
+                    }
+                }
+            }
+
+            // Calculate time difference in milliseconds
+            const diff = resetTime - utcNow;
+
+            // Convert to days, hours, minutes, seconds
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            return {
+                days: days,
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds,
+                total: diff
+            };
+        }
+
+        // Format time as Xd Xh Xm Xs
+        function formatTime(time) {
+            let parts = [];
+
+            // Only show days if there are any
+            if (time.days > 0) {
+                parts.push(`${time.days}d`);
+            }
+
+            // Always show hours, minutes, and seconds
+            parts.push(`${String(time.hours).padStart(2, '0')}h`);
+            parts.push(`${String(time.minutes).padStart(2, '0')}m`);
+            parts.push(`${String(time.seconds).padStart(2, '0')}s`);
+
+            return parts.join(' ');
+        }
+
+        // Update all timers on the page
+        function updateTimers() {
+            // Update current time display
+            const now = new Date();
+            document.getElementById('current-time').textContent =
+                `Current Time: ${now.toLocaleString()} (Local) | ${now.toUTCString().slice(0, -4)} (UTC)`;
+
+            // Update daily reset timers
+            const dailyTime = getTimeUntilReset('daily');
+            const dailyFormatted = formatTime(dailyTime);
+            document.querySelectorAll('[data-reset="daily"]').forEach(el => {
+                el.textContent = dailyFormatted;
+                // Add 'soon' class if less than 1 hour remaining
+                if (dailyTime.total < 3600000) {
+                    el.classList.add('soon');
+                } else {
+                    el.classList.remove('soon');
+                }
+            });
+
+            // Update weekly reset timers
+            const weeklyTime = getTimeUntilReset('weekly');
+            const weeklyFormatted = formatTime(weeklyTime);
+            document.querySelectorAll('[data-reset="weekly"]').forEach(el => {
+                el.textContent = weeklyFormatted;
+                if (weeklyTime.total < 3600000) {
+                    el.classList.add('soon');
+                } else {
+                    el.classList.remove('soon');
+                }
+            });
+
+            // Update WvW reset timers
+            const wvwTime = getTimeUntilReset('wvw');
+            const wvwFormatted = formatTime(wvwTime);
+            document.querySelectorAll('[data-reset="wvw"]').forEach(el => {
+                el.textContent = wvwFormatted;
+                if (wvwTime.total < 3600000) {
+                    el.classList.add('soon');
+                } else {
+                    el.classList.remove('soon');
+                }
+            });
+
+            // Update WvW Skirmish timers
+            const wvwSkirmishTime = getTimeUntilReset('wvw-skirmish');
+            const wvwSkirmishFormatted = formatTime(wvwSkirmishTime);
+            document.querySelectorAll('[data-reset="wvw-skirmish"]').forEach(el => {
+                el.textContent = wvwSkirmishFormatted;
+                if (wvwSkirmishTime.total < 600000) { // 10 minutes for skirmish
+                    el.classList.add('soon');
+                } else {
+                    el.classList.remove('soon');
+                }
+            });
+        }
+
+        // Toggle category expansion/collapse
+        function toggleCategory(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.expand-icon');
+
+            // Toggle expanded class
+            content.classList.toggle('expanded');
+            icon.classList.toggle('expanded');
+        }
+
+        // Initialize timers and update every second
+        updateTimers();
+        setInterval(updateTimers, 1000);
+    </script>
+</body>
+
+</html>
